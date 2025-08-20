@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能量视觉测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .camera-container {
+            background: #2a2a3e;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .camera-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #3a3a4e;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #888;
+        }
+        
+        .capture-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 40px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .capture-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .capture-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-container {
+            background: #2a2a3e;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .score-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .feature {
+            background: #3a3a4e;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .feature-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .user-select {
+            background: #2a2a3e;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .user-select h3 {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .user-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .user-option {
+            background: #3a3a4e;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .user-option:hover {
+            border-color: #667eea;
+        }
+        
+        .user-option.selected {
+            border-color: #667eea;
+            background: #4a4a5e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>能量视觉</h1>
+            <p>测试版本</p>
+        </div>
+        
+        <div class="user-select">
+            <h3>选择用户类型</h3>
+            <div class="user-options">
+                <div class="user-option" data-user="morning">晨型人</div>
+                <div class="user-option" data-user="night">夜猫子</div>
+                <div class="user-option" data-user="workaholic">工作狂</div>
+                <div class="user-option" data-user="balanced">平衡型</div>
+            </div>
+        </div>
+        
+        <div class="camera-container">
+            <div class="camera-placeholder">📷</div>
+            <button class="capture-btn" onclick="analyzeEnergy()">开始能量分析</button>
+            <div class="loading" id="loading" style="display: none;">分析中...</div>
+        </div>
+        
+        <div class="result-container" id="result">
+            <div class="score-display">
+                <div class="score" id="score">0</div>
+                <div id="level">能量等级</div>
+            </div>
+            <div class="features" id="features">
+                <!-- 特征将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedUser = 'balanced';
+        
+        // 用户选择
+        document.querySelectorAll('.user-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.user-option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedUser = option.dataset.user;
+            });
+        });
+        
+        // 默认选择平衡型
+        document.querySelector('[data-user="balanced"]').classList.add('selected');
+        
+        // 能量分析函数
+        function analyzeEnergy() {
+            const btn = document.querySelector('.capture-btn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            
+            btn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            // 模拟分析过程
+            setTimeout(() => {
+                const analysis = generateEnergyAnalysis();
+                displayResults(analysis);
+                
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }, 2000);
+        }
+        
+        // 生成能量分析
+        function generateEnergyAnalysis() {
+            const now = new Date();
+            const hour = now.getHours();
+            const dayOfWeek = now.getDay();
+            const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+            
+            // 基础值
+            let baseVitality = 0.3;
+            let baseBalance = 0.5;
+            let baseHarmony = 0.4;
+            let baseClarity = 0.6;
+            
+            // 时间调整
+            if (hour >= 6 && hour <= 9) {
+                baseVitality = 0.8;
+                baseBalance = 0.6;
+                baseHarmony = 0.7;
+                baseClarity = 0.5;
+            } else if (hour >= 10 && hour <= 12) {
+                baseVitality = 0.9;
+                baseBalance = 0.8;
+                baseHarmony = 0.8;
+                baseClarity = 0.9;
+            } else if (hour >= 13 && hour <= 15) {
+                baseVitality = 0.6;
+                baseBalance = 0.7;
+                baseHarmony = 0.6;
+                baseClarity = 0.7;
+            } else if (hour >= 16 && hour <= 18) {
+                baseVitality = 0.4;
+                baseBalance = 0.5;
+                baseHarmony = 0.5;
+                baseClarity = 0.6;
+            } else if (hour >= 19 && hour <= 22) {
+                baseVitality = 0.3;
+                baseBalance = 0.6;
+                baseHarmony = 0.7;
+                baseClarity = 0.4;
+            }
+            
+            // 周末调整
+            if (isWeekend) {
+                baseVitality += 0.1;
+                baseHarmony += 0.1;
+            }
+            
+            // 用户类型调整
+            const userModifiers = {
+                morning: { vitality: 0.2, balance: 0.1, harmony: 0.1, clarity: 0.2 },
+                night: { vitality: -0.1, balance: 0.0, harmony: 0.1, clarity: -0.2 },
+                workaholic: { vitality: 0.1, balance: -0.2, harmony: -0.1, clarity: 0.1 },
+                balanced: { vitality: 0.0, balance: 0.2, harmony: 0.2, clarity: 0.1 }
+            };
+            
+            const modifier = userModifiers[selectedUser];
+            
+            // 添加随机性
+            const random = (min, max) => min + Math.random() * (max - min);
+            
+            const features = {
+                vitality: Math.max(0, Math.min(100, (baseVitality + modifier.vitality + random(-0.1, 0.1)) * 100)),
+                balance: Math.max(0, Math.min(100, (baseBalance + modifier.balance + random(-0.1, 0.1)) * 100)),
+                harmony: Math.max(0, Math.min(100, (baseHarmony + modifier.harmony + random(-0.1, 0.1)) * 100)),
+                clarity: Math.max(0, Math.min(100, (baseClarity + modifier.clarity + random(-0.1, 0.1)) * 100))
+            };
+            
+            // 计算总分
+            const score = Math.round((features.vitality + features.balance + features.harmony + features.clarity) / 4);
+            
+            return {
+                score,
+                features,
+                level: getEnergyLevel(score),
+                time: now.toLocaleString()
+            };
+        }
+        
+        // 获取能量等级
+        function getEnergyLevel(score) {
+            if (score >= 80) return '优秀';
+            if (score >= 60) return '良好';
+            if (score >= 40) return '一般';
+            return '需要提升';
+        }
+        
+        // 显示结果
+        function displayResults(analysis) {
+            document.getElementById('score').textContent = analysis.score;
+            document.getElementById('level').textContent = analysis.level;
+            
+            const featuresContainer = document.getElementById('features');
+            featuresContainer.innerHTML = '';
+            
+            Object.entries(analysis.features).forEach(([key, value]) => {
+                const feature = document.createElement('div');
+                feature.className = 'feature';
+                feature.innerHTML = `
+                    <div class="feature-label">${getFeatureLabel(key)}</div>
+                    <div class="feature-value">${Math.round(value)}%</div>
+                `;
+                featuresContainer.appendChild(feature);
+            });
+            
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        // 获取特征标签
+        function getFeatureLabel(key) {
+            const labels = {
+                vitality: '生命力',
+                balance: '平衡性',
+                harmony: '和谐度',
+                clarity: '清晰度'
+            };
+            return labels[key] || key;
+        }
+    </script>
+</body>
+</html>
