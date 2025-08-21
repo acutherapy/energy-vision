@@ -145,7 +145,10 @@ export default function PlanScreen() {
   }
 
   const currentDayData = plan.days.find(d => d.day === currentDay);
-  const progressPercentage = (plan.progress.completed / plan.progress.total) * 100;
+  // 计算当前天的进度
+  const currentDayCompleted = currentDayData ? currentDayData.tasks.filter(t => t.done).length : 0;
+  const currentDayTotal = currentDayData ? currentDayData.tasks.length : 0;
+  const progressPercentage = currentDayTotal > 0 ? (currentDayCompleted / currentDayTotal) * 100 : 0;
 
   return (
     <SafeAreaView style={styles.container}>
