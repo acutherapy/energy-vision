@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build-safe",
+  "buildCommand": "./build-vercel.sh",
   "outputDirectory": "dist",
   "rewrites": [
     {
