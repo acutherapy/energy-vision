@@ -226,16 +226,22 @@ export default function HomeScreen() {
         </View>
       )}
 
-      <ScrollView 
-        style={styles.scrollView}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={true}
-        bounces={true}
-        nestedScrollEnabled={true}
-        scrollEnabled={true}
-        alwaysBounceVertical={true}
-        keyboardShouldPersistTaps="handled"
-      >
+      <div style={{ 
+        flex: 1, 
+        height: '100vh', 
+        overflow: 'auto', 
+        backgroundColor: '#0B0B0D',
+        WebkitOverflowScrolling: 'touch',
+        position: 'relative'
+      }}>
+        <div style={{ 
+          paddingLeft: 24, 
+          paddingRight: 24, 
+          paddingBottom: 32, 
+          minHeight: 8000,
+          paddingTop: 20,
+          position: 'relative'
+        }}>
         {/* 主要功能按钮 */}
         <TouchableOpacity
           style={styles.testCaptureButton}
@@ -362,6 +368,22 @@ export default function HomeScreen() {
           <Text style={styles.finalTestText}>🎉 滚动到底部了！</Text>
         </View>
 
+        {/* 添加更多测试内容确保滚动 */}
+        {Array.from({ length: 100 }, (_, i) => (
+          <View key={`extra-${i}`} style={styles.testItem}>
+            <Text style={styles.testItemText}>额外测试内容 {i + 1}</Text>
+          </View>
+        ))}
+
+        <View style={styles.finalTest}>
+          <Text style={styles.finalTestText}>🎯 真正的底部！</Text>
+        </View>
+
+        {/* 添加更多内容确保滚动 */}
+        <View style={styles.finalTest}>
+          <Text style={styles.finalTestText}>📱 滚动测试完成！</Text>
+        </View>
+
         {/* 拍照动画 */}
         {captureAnimation && (
           <View style={styles.captureAnimation}>
@@ -369,9 +391,8 @@ export default function HomeScreen() {
             <Text style={styles.captureText}>📸 拍照中...</Text>
           </View>
         )}
-
-
-      </ScrollView>
+        </div>
+      </div>
     </SafeAreaView>
   );
 }
@@ -404,14 +425,7 @@ const styles = StyleSheet.create({
     padding: LAYOUT.spacing.xs,
     marginLeft: LAYOUT.spacing.sm,
   },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: LAYOUT.spacing.lg,
-    paddingBottom: LAYOUT.spacing.xl,
-    minHeight: 4000, // 大幅增加最小高度
-  },
+
   cameraContainer: {
     height: 400,
     borderRadius: LAYOUT.borderRadius.lg,

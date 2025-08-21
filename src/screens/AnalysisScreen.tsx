@@ -155,16 +155,22 @@ export default function AnalysisScreen() {
       </View>
 
       <View style={styles.mainContainer}>
-        <ScrollView 
-          style={styles.scrollView}
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={true}
-          bounces={true}
-          nestedScrollEnabled={true}
-          scrollEnabled={true}
-          alwaysBounceVertical={true}
-          keyboardShouldPersistTaps="handled"
-        >
+        <div style={{ 
+          flex: 1, 
+          height: '100vh', 
+          overflow: 'auto', 
+          backgroundColor: '#0B0B0D',
+          WebkitOverflowScrolling: 'touch',
+          position: 'relative'
+        }}>
+          <div style={{ 
+            paddingLeft: 24, 
+            paddingRight: 24, 
+            paddingBottom: 32, 
+            minHeight: 6000,
+            paddingTop: 20,
+            position: 'relative'
+          }}>
           {/* 能量画像 - DALL-E生成 */}
           <View style={[
             styles.portraitContainer,
@@ -384,7 +390,19 @@ export default function AnalysisScreen() {
           <View style={styles.finalTest}>
             <Text style={styles.finalTestText}>🎉 分析页面滚动到底部！</Text>
           </View>
-        </ScrollView>
+
+          {/* 添加更多测试内容确保滚动 */}
+          {Array.from({ length: 50 }, (_, i) => (
+            <View key={`analysis-extra-${i}`} style={styles.testItem}>
+              <Text style={styles.testItemText}>分析页面测试内容 {i + 1}</Text>
+            </View>
+          ))}
+
+          <View style={styles.finalTest}>
+            <Text style={styles.finalTestText}>📊 分析页面滚动测试完成！</Text>
+          </View>
+        </div>
+        </div>
 
         {/* 功能说明 - 在内容底部 */}
         <View style={styles.featureDescription}>
@@ -443,14 +461,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background.dark,
   },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: LAYOUT.spacing.lg,
-    paddingBottom: LAYOUT.spacing.xl,
-    minHeight: 2500, // 大幅增加最小高度
-  },
+
   portraitContainer: {
     alignItems: 'center',
     marginBottom: LAYOUT.spacing.lg,
