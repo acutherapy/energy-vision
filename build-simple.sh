@@ -78,10 +78,12 @@ cat > dist/index.html << 'EOF'
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
         
         .feature:hover {
             transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
         }
         
         .feature h3 {
@@ -109,11 +111,22 @@ cat > dist/index.html << 'EOF'
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            margin: 0 0.5rem;
         }
         
         .cta-button:hover {
             background: rgba(255,255,255,0.3);
             transform: scale(1.05);
+        }
+        
+        .cta-button.primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-color: #ff6b6b;
+        }
+        
+        .cta-button.secondary {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+            border-color: #4834d4;
         }
         
         .status {
@@ -125,6 +138,21 @@ cat > dist/index.html << 'EOF'
             opacity: 0.8;
         }
         
+        .github-link {
+            margin-top: 1rem;
+        }
+        
+        .github-link a {
+            color: #fff;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .github-link a:hover {
+            opacity: 1;
+        }
+        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -132,6 +160,12 @@ cat > dist/index.html << 'EOF'
             
             .features {
                 grid-template-columns: 1fr;
+            }
+            
+            .cta-button {
+                display: block;
+                margin: 0.5rem auto;
+                max-width: 200px;
             }
         }
     </style>
@@ -144,29 +178,38 @@ cat > dist/index.html << 'EOF'
         </div>
         
         <div class="features">
-            <div class="feature">
+            <div class="feature" onclick="openGitHub()">
                 <h3>📱 移动端优化</h3>
                 <p>专为手机设计的界面，支持触摸操作和手势控制</p>
             </div>
-            <div class="feature">
+            <div class="feature" onclick="openGitHub()">
                 <h3>🤖 AI智能分析</h3>
                 <p>基于OpenAI的智能能量状态分析，提供个性化建议</p>
             </div>
-            <div class="feature">
+            <div class="feature" onclick="openGitHub()">
                 <h3>📊 21天计划</h3>
                 <p>个性化能量提升方案，每日任务跟踪和进度管理</p>
             </div>
         </div>
         
         <div class="cta">
-            <a href="#" class="cta-button" onclick="alert('应用正在开发中，敬请期待！')">
-                🚀 开始使用
+            <a href="https://github.com/acutherapy/energy-vision" class="cta-button primary" target="_blank">
+                🚀 查看源码
+            </a>
+            <a href="https://github.com/acutherapy/energy-vision/issues" class="cta-button secondary" target="_blank">
+                📝 反馈问题
             </a>
         </div>
         
         <div class="status">
             <p>✨ 应用功能正在完善中，即将推出完整版本</p>
             <p>📧 如需测试完整功能，请联系开发团队</p>
+        </div>
+        
+        <div class="github-link">
+            <a href="https://github.com/acutherapy/energy-vision" target="_blank">
+                🔗 GitHub: acutherapy/energy-vision
+            </a>
         </div>
     </div>
     
@@ -179,6 +222,11 @@ cat > dist/index.html << 'EOF'
                 feature.style.animation = 'fadeInUp 0.6s ease forwards';
             });
         });
+        
+        // 打开GitHub
+        function openGitHub() {
+            window.open('https://github.com/acutherapy/energy-vision', '_blank');
+        }
         
         // 添加动画样式
         const style = document.createElement('style');
