@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS } from '@/constants/colors';
 import { LAYOUT } from '@/constants/layout';
-import { analyzeImageWithAI, generatePersonalizedAdvice } from '@/services/aiAnalysis';
+import { generatePersonalizedAdvice } from '@/services/aiAnalysis';
 
 export default function TestScreen() {
   const navigation = useNavigation();

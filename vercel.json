@@ -1,5 +1,5 @@
 {
-  "buildCommand": "./build-vercel.sh",
+  "buildCommand": "./build-simple.sh",
   "outputDirectory": "dist",
   "rewrites": [
     {
