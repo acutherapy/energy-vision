@@ -129,6 +129,11 @@ cat > dist/index.html << 'EOF'
             border-color: #4834d4;
         }
         
+        .cta-button.success {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            border-color: #00b894;
+        }
+        
         .status {
             margin-top: 2rem;
             padding: 1rem;
@@ -138,18 +143,23 @@ cat > dist/index.html << 'EOF'
             opacity: 0.8;
         }
         
-        .github-link {
+        .links {
             margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
         
-        .github-link a {
+        .links a {
             color: #fff;
             text-decoration: none;
             opacity: 0.7;
             transition: opacity 0.3s ease;
+            font-size: 0.9rem;
         }
         
-        .github-link a:hover {
+        .links a:hover {
             opacity: 1;
         }
         
@@ -167,6 +177,11 @@ cat > dist/index.html << 'EOF'
                 margin: 0.5rem auto;
                 max-width: 200px;
             }
+            
+            .links {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -178,26 +193,29 @@ cat > dist/index.html << 'EOF'
         </div>
         
         <div class="features">
-            <div class="feature" onclick="openGitHub()">
+            <div class="feature" onclick="openApp()">
                 <h3>📱 移动端优化</h3>
                 <p>专为手机设计的界面，支持触摸操作和手势控制</p>
             </div>
-            <div class="feature" onclick="openGitHub()">
+            <div class="feature" onclick="openApp()">
                 <h3>🤖 AI智能分析</h3>
                 <p>基于OpenAI的智能能量状态分析，提供个性化建议</p>
             </div>
-            <div class="feature" onclick="openGitHub()">
+            <div class="feature" onclick="openApp()">
                 <h3>📊 21天计划</h3>
                 <p>个性化能量提升方案，每日任务跟踪和进度管理</p>
             </div>
         </div>
         
         <div class="cta">
-            <a href="https://github.com/acutherapy/energy-vision" class="cta-button primary" target="_blank">
-                🚀 查看源码
+            <a href="#" class="cta-button primary" onclick="openApp()">
+                🚀 开始使用应用
             </a>
-            <a href="https://github.com/acutherapy/energy-vision/issues" class="cta-button secondary" target="_blank">
-                📝 反馈问题
+            <a href="https://github.com/acutherapy/energy-vision" class="cta-button secondary" target="_blank">
+                📝 查看源码
+            </a>
+            <a href="https://github.com/acutherapy/energy-vision/issues" class="cta-button success" target="_blank">
+                💬 反馈问题
             </a>
         </div>
         
@@ -206,10 +224,10 @@ cat > dist/index.html << 'EOF'
             <p>📧 如需测试完整功能，请联系开发团队</p>
         </div>
         
-        <div class="github-link">
-            <a href="https://github.com/acutherapy/energy-vision" target="_blank">
-                🔗 GitHub: acutherapy/energy-vision
-            </a>
+        <div class="links">
+            <a href="#" onclick="openApp()">🔗 直接进入应用</a>
+            <a href="https://github.com/acutherapy/energy-vision" target="_blank">📁 GitHub仓库</a>
+            <a href="https://github.com/acutherapy/energy-vision/issues" target="_blank">🐛 报告问题</a>
         </div>
     </div>
     
@@ -223,9 +241,16 @@ cat > dist/index.html << 'EOF'
             });
         });
         
-        // 打开GitHub
-        function openGitHub() {
-            window.open('https://github.com/acutherapy/energy-vision', '_blank');
+        // 打开应用
+        function openApp() {
+            // 这里可以链接到实际的应用页面
+            // 目前显示一个提示，后续可以改为实际的应用URL
+            alert('🚀 应用正在开发中！\n\n当前功能：\n• 能量分析\n• AI智能解读\n• 21天计划\n• 用户管理\n\n请访问GitHub查看完整源码！');
+            
+            // 后续可以改为：
+            // window.location.href = '/app';
+            // 或者
+            // window.open('/app', '_blank');
         }
         
         // 添加动画样式
