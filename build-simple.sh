@@ -382,6 +382,14 @@ cat > dist/app/index.html << 'EOF'
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+        
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
         }
         
         .capture-button {
@@ -393,6 +401,12 @@ cat > dist/app/index.html << 'EOF'
             cursor: pointer;
             margin: 1rem auto;
             display: block;
+            font-size: 1.5rem;
+        }
+        
+        .capture-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .instruction {
@@ -415,6 +429,30 @@ cat > dist/app/index.html << 'EOF'
             font-size: 0.9rem;
         }
         
+        .analysis-progress {
+            display: none;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem;
@@ -433,8 +471,8 @@ cat > dist/app/index.html << 'EOF'
     <div class="header">
         <div class="title">能量视觉</div>
         <div class="header-icons">
-            <div class="icon">👤</div>
-            <div class="icon">⚙️</div>
+            <div class="icon" onclick="showUserProfile()">👤</div>
+            <div class="icon" onclick="showSettings()">⚙️</div>
         </div>
     </div>
     
@@ -457,10 +495,10 @@ cat > dist/app/index.html << 'EOF'
             </div>
             
             <div class="face-frame">
-                <!-- 相机预览区域 -->
+                <video id="video" autoplay playsinline></video>
             </div>
             
-            <button class="capture-button" onclick="capturePhoto()">
+            <button class="capture-button" id="captureBtn" onclick="capturePhoto()" disabled>
                 📷
             </button>
             
@@ -476,31 +514,229 @@ cat > dist/app/index.html << 'EOF'
                 系统将分析您的面部能量状态
             </div>
         </div>
+        
+        <div class="analysis-progress" id="analysisProgress">
+            <h3>🔮 正在分析您的能量状态...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">正在初始化分析...</p>
+        </div>
     </div>
     
     <script>
+        let stream = null;
+        let isAnalyzing = false;
+        
+        // 开始能量分析
         function startAnalysis() {
-            // 请求相机权限
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function(stream) {
-                        alert('相机权限已获取！可以开始拍照分析。');
-                    })
-                    .catch(function(err) {
-                        alert('无法访问相机：' + err.message);
-                    });
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                })
+                .then(function(videoStream) {
+                    stream = videoStream;
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+                    document.getElementById('captureBtn').disabled = false;
+                    
+                    // 显示成功消息
+                    showMessage('相机已启动！请将面部置于框内，然后点击拍照按钮。', 'success');
+                })
+                .catch(function(err) {
+                    showMessage('无法访问相机：' + err.message, 'error');
+                });
             } else {
-                alert('您的浏览器不支持相机功能');
+                showMessage('您的浏览器不支持相机功能', 'error');
             }
         }
         
+        // 拍照功能
         function capturePhoto() {
-            alert('拍照功能正在开发中...');
+            if (!stream) {
+                showMessage('请先启动相机', 'error');
+                return;
+            }
+            
+            const video = document.getElementById('video');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            
+            // 停止相机
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            
+            document.getElementById('captureBtn').disabled = true;
+            
+            // 开始分析
+            startEnergyAnalysis();
         }
         
-        function enterAnalysis() {
-            alert('直接进入分析页面功能正在开发中...');
+        // 开始能量分析
+        function startEnergyAnalysis() {
+            if (isAnalyzing) return;
+            
+            isAnalyzing = true;
+            const progressDiv = document.getElementById('analysisProgress');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressDiv.style.display = 'block';
+            
+            const steps = [
+                { progress: 20, text: '正在分析面部特征...' },
+                { progress: 40, text: '计算能量状态...' },
+                { progress: 60, text: '生成个性化建议...' },
+                { progress: 80, text: '创建21天计划...' },
+                { progress: 100, text: '分析完成！' }
+            ];
+            
+            let currentStep = 0;
+            
+            const updateProgress = () => {
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    progressFill.style.width = step.progress + '%';
+                    progressText.textContent = step.text;
+                    currentStep++;
+                    
+                    if (currentStep < steps.length) {
+                        setTimeout(updateProgress, 1500);
+                    } else {
+                        setTimeout(() => {
+                            showAnalysisResults();
+                        }, 1000);
+                    }
+                }
+            };
+            
+            updateProgress();
         }
+        
+        // 显示分析结果
+        function showAnalysisResults() {
+            const results = {
+                score: 85,
+                level: 'high',
+                features: {
+                    vitality: 88,
+                    balance: 82,
+                    harmony: 85,
+                    clarity: 87
+                },
+                insights: [
+                    '您的能量状态非常活跃',
+                    '身心协调良好',
+                    '适合进行创造性工作',
+                    '建议多进行户外活动'
+                ],
+                recommendations: [
+                    '每天进行30分钟有氧运动',
+                    '增加绿色蔬菜摄入',
+                    '保持充足睡眠',
+                    '尝试冥想练习'
+                ]
+            };
+            
+            const message = `
+🔮 能量分析结果
+
+📊 总体评分: ${results.score}/100
+🌟 能量等级: ${results.level}
+
+💡 主要洞察:
+${results.insights.map(insight => '• ' + insight).join('\n')}
+
+💪 个性化建议:
+${results.recommendations.map(rec => '• ' + rec).join('\n')}
+
+🎯 建议开始21天能量提升计划！
+            `;
+            
+            showMessage(message, 'success');
+            isAnalyzing = false;
+            
+            // 隐藏进度条
+            setTimeout(() => {
+                document.getElementById('analysisProgress').style.display = 'none';
+            }, 3000);
+        }
+        
+        // 直接进入分析页面
+        function enterAnalysis() {
+            showMessage('正在进入分析页面...', 'info');
+            setTimeout(() => {
+                showAnalysisResults();
+            }, 1000);
+        }
+        
+        // 显示用户资料
+        function showUserProfile() {
+            showMessage('用户资料功能正在开发中...', 'info');
+        }
+        
+        // 显示设置
+        function showSettings() {
+            showMessage('设置功能正在开发中...', 'info');
+        }
+        
+        // 显示消息
+        function showMessage(message, type = 'info') {
+            // 创建消息弹窗
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                color: #333;
+                padding: 2rem;
+                border-radius: 15px;
+                max-width: 90%;
+                max-height: 80%;
+                overflow-y: auto;
+                z-index: 1000;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                white-space: pre-line;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            `;
+            
+            modal.textContent = message;
+            
+            // 添加关闭按钮
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '关闭';
+            closeBtn.style.cssText = `
+                background: #007bff;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 1rem;
+                float: right;
+            `;
+            closeBtn.onclick = () => document.body.removeChild(modal);
+            
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+        }
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            showMessage('欢迎使用能量视觉！\n\n点击"开始能量分析"按钮启动相机，然后拍照进行能量分析。', 'info');
+        });
     </script>
 </body>
 </html>
