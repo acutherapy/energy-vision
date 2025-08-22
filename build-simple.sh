@@ -383,6 +383,7 @@ cat > dist/app/index.html << 'EOF'
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            background: rgba(0,0,0,0.3);
         }
         
         #video {
@@ -390,6 +391,12 @@ cat > dist/app/index.html << 'EOF'
             height: 100%;
             object-fit: cover;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+        
+        .camera-placeholder {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            text-align: center;
         }
         
         .capture-button {
@@ -402,11 +409,18 @@ cat > dist/app/index.html << 'EOF'
             margin: 1rem auto;
             display: block;
             font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .capture-button:hover {
+            background: #9333ea;
+            transform: scale(1.1);
         }
         
         .capture-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
         
         .instruction {
@@ -453,6 +467,44 @@ cat > dist/app/index.html << 'EOF'
             transition: width 0.3s ease;
         }
         
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            color: #333;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+            white-space: pre-line;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem;
@@ -494,8 +546,11 @@ cat > dist/app/index.html << 'EOF'
                 请将面部置于瓜子脸框内
             </div>
             
-            <div class="face-frame">
-                <video id="video" autoplay playsinline></video>
+            <div class="face-frame" id="faceFrame">
+                <div class="camera-placeholder" id="cameraPlaceholder">
+                    📷<br>点击上方按钮启动相机
+                </div>
+                <video id="video" autoplay playsinline style="display: none;"></video>
             </div>
             
             <button class="capture-button" id="captureBtn" onclick="capturePhoto()" disabled>
@@ -524,6 +579,14 @@ cat > dist/app/index.html << 'EOF'
         </div>
     </div>
     
+    <!-- 模态框 -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">关闭</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+    
     <script>
         let stream = null;
         let isAnalyzing = false;
@@ -541,17 +604,21 @@ cat > dist/app/index.html << 'EOF'
                 .then(function(videoStream) {
                     stream = videoStream;
                     const video = document.getElementById('video');
+                    const placeholder = document.getElementById('cameraPlaceholder');
+                    
                     video.srcObject = stream;
+                    video.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    
                     document.getElementById('captureBtn').disabled = false;
                     
-                    // 显示成功消息
                     showMessage('相机已启动！请将面部置于框内，然后点击拍照按钮。', 'success');
                 })
                 .catch(function(err) {
-                    showMessage('无法访问相机：' + err.message, 'error');
+                    showMessage('无法访问相机：' + err.message + '\n\n请确保：\n• 允许浏览器访问相机\n• 使用HTTPS连接\n• 相机未被其他应用占用', 'error');
                 });
             } else {
-                showMessage('您的浏览器不支持相机功能', 'error');
+                showMessage('您的浏览器不支持相机功能\n\n建议使用Chrome、Safari或Firefox最新版本', 'error');
             }
         }
         
@@ -575,6 +642,11 @@ cat > dist/app/index.html << 'EOF'
                 stream.getTracks().forEach(track => track.stop());
                 stream = null;
             }
+            
+            // 隐藏视频，显示拍照成功提示
+            video.style.display = 'none';
+            document.getElementById('cameraPlaceholder').style.display = 'block';
+            document.getElementById('cameraPlaceholder').innerHTML = '✅<br>拍照成功！';
             
             document.getElementById('captureBtn').disabled = true;
             
@@ -682,60 +754,70 @@ ${results.recommendations.map(rec => '• ' + rec).join('\n')}
         
         // 显示用户资料
         function showUserProfile() {
-            showMessage('用户资料功能正在开发中...', 'info');
+            const message = `
+👤 用户资料
+
+📱 用户名: 能量用户
+🎯 当前等级: 能量探索者
+📊 分析次数: 12次
+🏆 成就: 连续7天打卡
+
+💡 功能开发中...
+• 个性化设置
+• 历史记录查看
+• 成就系统
+            `;
+            showMessage(message, 'info');
         }
         
         // 显示设置
         function showSettings() {
-            showMessage('设置功能正在开发中...', 'info');
+            const message = `
+⚙️ 应用设置
+
+🔔 通知设置
+• 每日提醒: 开启
+• 分析完成提醒: 开启
+
+📱 相机设置
+• 自动保存照片: 关闭
+• 高质量模式: 开启
+
+🎨 界面设置
+• 深色模式: 自动
+• 字体大小: 标准
+
+💡 功能开发中...
+• 更多个性化选项
+• 数据导出功能
+            `;
+            showMessage(message, 'info');
         }
         
         // 显示消息
         function showMessage(message, type = 'info') {
-            // 创建消息弹窗
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: white;
-                color: #333;
-                padding: 2rem;
-                border-radius: 15px;
-                max-width: 90%;
-                max-height: 80%;
-                overflow-y: auto;
-                z-index: 1000;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                white-space: pre-line;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            `;
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modalContent');
             
-            modal.textContent = message;
-            
-            // 添加关闭按钮
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = '关闭';
-            closeBtn.style.cssText = `
-                background: #007bff;
-                color: white;
-                border: none;
-                padding: 0.5rem 1rem;
-                border-radius: 5px;
-                cursor: pointer;
-                margin-top: 1rem;
-                float: right;
-            `;
-            closeBtn.onclick = () => document.body.removeChild(modal);
-            
-            modal.appendChild(closeBtn);
-            document.body.appendChild(modal);
+            modalContent.textContent = message;
+            modal.style.display = 'flex';
         }
+        
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        
+        // 点击模态框背景关闭
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
         
         // 页面加载完成后的初始化
         document.addEventListener('DOMContentLoaded', function() {
-            showMessage('欢迎使用能量视觉！\n\n点击"开始能量分析"按钮启动相机，然后拍照进行能量分析。', 'info');
+            showMessage('欢迎使用能量视觉！\n\n📸 点击"开始能量分析"按钮启动相机\n📷 拍照后自动开始能量分析\n🎯 查看个性化建议和21天计划', 'info');
         });
     </script>
 </body>
