@@ -15,6 +15,7 @@ npm install
 # 创建简化的HTML版本
 echo "🔨 创建简化版本..."
 mkdir -p dist
+mkdir -p dist/app
 
 # 创建基本的HTML文件
 cat > dist/index.html << 'EOF'
@@ -243,14 +244,20 @@ cat > dist/index.html << 'EOF'
         
         // 打开应用
         function openApp() {
-            // 这里可以链接到实际的应用页面
-            // 目前显示一个提示，后续可以改为实际的应用URL
-            alert('🚀 应用正在开发中！\n\n当前功能：\n• 能量分析\n• AI智能解读\n• 21天计划\n• 用户管理\n\n请访问GitHub查看完整源码！');
+            // 直接跳转到实际的应用页面
+            // 使用当前域名，这样在Vercel部署后会自动使用正确的域名
+            const currentDomain = window.location.origin;
+            const appUrl = currentDomain + '/app';
             
-            // 后续可以改为：
-            // window.location.href = '/app';
-            // 或者
-            // window.open('/app', '_blank');
+            // 尝试跳转到应用页面
+            window.location.href = appUrl;
+            
+            // 如果应用页面不存在，显示提示信息
+            setTimeout(() => {
+                if (window.location.pathname !== '/app') {
+                    alert('🚀 应用正在开发中！\n\n当前功能：\n• 能量分析\n• AI智能解读\n• 21天计划\n• 用户管理\n\n请访问GitHub查看完整源码！');
+                }
+            }, 1000);
         }
         
         // 添加动画样式
@@ -268,6 +275,244 @@ cat > dist/index.html << 'EOF'
             }
         `;
         document.head.appendChild(style);
+    </script>
+</body>
+</html>
+EOF
+
+# 创建应用页面
+cat > dist/app/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能量视觉 - Energy Vision</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .header-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .main-content {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .action-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .test-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .camera-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .face-frame {
+            width: 200px;
+            height: 250px;
+            border: 3px dashed #a855f7;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            margin: 2rem auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .capture-button {
+            width: 60px;
+            height: 60px;
+            background: #a855f7;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            margin: 1rem auto;
+            display: block;
+        }
+        
+        .instruction {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .face-frame {
+                width: 150px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-button">← 返回</a>
+    
+    <div class="header">
+        <div class="title">能量视觉</div>
+        <div class="header-icons">
+            <div class="icon">👤</div>
+            <div class="icon">⚙️</div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <button class="action-button" onclick="startAnalysis()">
+            📸 🚀 开始能量分析
+        </button>
+        
+        <div class="instruction">
+            ✨ 体验完整 → 任务打卡
+        </div>
+        
+        <button class="test-button" onclick="enterAnalysis()">
+            ✏️ 测试: 直接进入分析页面
+        </button>
+        
+        <div class="camera-section">
+            <div class="instruction">
+                请将面部置于瓜子脸框内
+            </div>
+            
+            <div class="face-frame">
+                <!-- 相机预览区域 -->
+            </div>
+            
+            <button class="capture-button" onclick="capturePhoto()">
+                📷
+            </button>
+            
+            <div class="instruction">
+                点击拍照
+            </div>
+            
+            <div class="instruction">
+                点击按钮开始能量分析
+            </div>
+            
+            <div class="instruction">
+                系统将分析您的面部能量状态
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function startAnalysis() {
+            // 请求相机权限
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        alert('相机权限已获取！可以开始拍照分析。');
+                    })
+                    .catch(function(err) {
+                        alert('无法访问相机：' + err.message);
+                    });
+            } else {
+                alert('您的浏览器不支持相机功能');
+            }
+        }
+        
+        function capturePhoto() {
+            alert('拍照功能正在开发中...');
+        }
+        
+        function enterAnalysis() {
+            alert('直接进入分析页面功能正在开发中...');
+        }
     </script>
 </body>
 </html>
