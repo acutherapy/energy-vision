@@ -244,20 +244,8 @@ cat > dist/index.html << 'EOF'
         
         // 打开应用
         function openApp() {
-            // 直接跳转到实际的应用页面
-            // 使用当前域名，这样在Vercel部署后会自动使用正确的域名
-            const currentDomain = window.location.origin;
-            const appUrl = currentDomain + '/app';
-            
-            // 尝试跳转到应用页面
-            window.location.href = appUrl;
-            
-            // 如果应用页面不存在，显示提示信息
-            setTimeout(() => {
-                if (window.location.pathname !== '/app') {
-                    alert('🚀 应用正在开发中！\n\n当前功能：\n• 能量分析\n• AI智能解读\n• 21天计划\n• 用户管理\n\n请访问GitHub查看完整源码！');
-                }
-            }, 1000);
+            // 直接跳转到应用页面
+            window.location.href = '/app';
         }
         
         // 添加动画样式
