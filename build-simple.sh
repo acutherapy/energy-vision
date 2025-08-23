@@ -757,55 +757,270 @@ cat > dist/app/index.html << 'EOF'
         
         // 显示分析结果 - 增强版
         function showAnalysisResults() {
-            const message = `
-🔮 能量分析结果 - 增强版
-
-📊 总体评分: 85/100
-🌟 能量等级: high
-
-💡 主要洞察:
-• 您的能量状态非常活跃
-• 身心协调良好
-• 适合进行创造性工作
-• 建议多进行户外活动
-
-💪 个性化建议:
-• 每天进行30分钟有氧运动
-• 增加绿色蔬菜摄入
-• 保持充足睡眠
-• 尝试冥想练习
-
-🎯 21天能量提升计划:
-第1-7天: 建立基础习惯
-第8-14天: 深化能量练习
-第15-21天: 巩固和提升
-
-🌈 能量光环解读:
-• 光环色彩: 绿色系
-• 能量强度: 85%
-• 流动模式: 顺时针旋转
-• 代表特质: 生命力旺盛
-
-🎨 色彩建议:
-• 适合色彩: 绿色、蓝色、紫色
-• 避免色彩: 过于鲜艳的红色
-• 妆容建议: 自然清新的色调
-
-🌿 五行分析:
-• 主导五行: 木
-• 平衡状态: 良好
-• 调和建议: 多接触自然，增加木元素
-
-建议开始21天能量提升计划！
+            // 创建包含能量光环和详细分析的结果页面
+            const resultHTML = `
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #333; margin-bottom: 1rem;">🔮 能量分析结果 - 增强版</h2>
+                    
+                    <!-- 能量光环 -->
+                    <div style="margin: 2rem 0;">
+                        <h3 style="color: #333;">🌈 您的能量光环</h3>
+                        <div class="energy-aura" style="width: 150px; height: 150px; margin: 1rem auto; position: relative; border-radius: 50%; background: conic-gradient(from 0deg, #4CAF50, #8BC34A, #CDDC39, #4CAF50); animation: rotate 10s linear infinite;">
+                            <div style="position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                85
+                            </div>
+                        </div>
+                        <p style="color: #666; font-size: 0.9rem;">能量强度: 85% | 光环色彩: 绿色系 | 流动模式: 顺时针</p>
+                    </div>
+                    
+                    <!-- 基础分析 -->
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">📊 基础分析</h3>
+                        <p style="color: #666; margin: 0.5rem 0;"><strong>总体评分:</strong> 85/100</p>
+                        <p style="color: #666; margin: 0.5rem 0;"><strong>能量等级:</strong> high</p>
+                        <p style="color: #666; margin: 0.5rem 0;"><strong>生命力:</strong> 88/100</p>
+                        <p style="color: #666; margin: 0.5rem 0;"><strong>平衡性:</strong> 82/100</p>
+                    </div>
+                    
+                    <!-- AI智能解读 -->
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">🤖 AI智能解读</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.5rem 0;"><strong>主要洞察:</strong></p>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                                <li>您的能量状态非常活跃</li>
+                                <li>身心协调良好</li>
+                                <li>适合进行创造性工作</li>
+                                <li>建议多进行户外活动</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 色彩和五行分析 -->
+                    <div style="background: #f3e5f5; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">🎨 色彩和五行分析</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.5rem 0;"><strong>适合色彩:</strong> 绿色、蓝色、紫色</p>
+                            <p style="margin: 0.5rem 0;"><strong>避免色彩:</strong> 过于鲜艳的红色</p>
+                            <p style="margin: 0.5rem 0;"><strong>主导五行:</strong> 木</p>
+                            <p style="margin: 0.5rem 0;"><strong>平衡状态:</strong> 良好</p>
+                            <p style="margin: 0.5rem 0;"><strong>调和建议:</strong> 多接触自然，增加木元素</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 21天计划 -->
+                    <div style="background: #e8f5e8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">📊 21天能量提升计划</h3>
+                        <div style="text-align: left; color: #666;">
+                            <div style="margin: 0.5rem 0;">
+                                <p style="margin: 0.3rem 0;"><strong>第1-7天: 建立基础习惯</strong></p>
+                                <ul style="margin: 0.3rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                                    <li>每天30分钟有氧运动</li>
+                                    <li>增加绿色蔬菜摄入</li>
+                                    <li>保持充足睡眠</li>
+                                </ul>
+                            </div>
+                            <div style="margin: 0.5rem 0;">
+                                <p style="margin: 0.3rem 0;"><strong>第8-14天: 深化能量练习</strong></p>
+                                <ul style="margin: 0.3rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                                    <li>尝试冥想练习</li>
+                                    <li>增加户外活动</li>
+                                    <li>能量呼吸练习</li>
+                                </ul>
+                            </div>
+                            <div style="margin: 0.5rem 0;">
+                                <p style="margin: 0.3rem 0;"><strong>第15-21天: 巩固和提升</strong></p>
+                                <ul style="margin: 0.3rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                                    <li>能量光环冥想</li>
+                                    <li>色彩疗法练习</li>
+                                    <li>五行平衡练习</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮 -->
+                    <div style="margin: 2rem 0;">
+                        <button onclick="start21DayPlan()" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 0.5rem; cursor: pointer;">
+                            🎯 开始21天计划
+                        </button>
+                        <button onclick="showEnergyAura()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 0.5rem; cursor: pointer;">
+                            🌈 查看能量光环
+                        </button>
+                        <button onclick="showColorAnalysis()" style="background: linear-gradient(45deg, #4834d4, #686de0); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 0.5rem; cursor: pointer;">
+                            🎨 色彩分析
+                        </button>
+                    </div>
+                </div>
             `;
             
-            showMessage(message, 'success');
+            showMessage(resultHTML, 'success');
             isAnalyzing = false;
             
             // 隐藏进度条
             setTimeout(() => {
                 document.getElementById('analysisProgress').style.display = 'none';
             }, 3000);
+        }
+        
+        // 开始21天计划
+        function start21DayPlan() {
+            const planHTML = `
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #333; margin-bottom: 1rem;">📊 21天能量提升计划</h2>
+                    
+                    <div style="background: #e8f5e8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">🎯 今日任务 (第1天)</h3>
+                        <div style="text-align: left; color: #666;">
+                            <div style="margin: 0.5rem 0; padding: 0.5rem; background: white; border-radius: 5px;">
+                                <input type="checkbox" id="task1" style="margin-right: 0.5rem;">
+                                <label for="task1">30分钟有氧运动</label>
+                            </div>
+                            <div style="margin: 0.5rem 0; padding: 0.5rem; background: white; border-radius: 5px;">
+                                <input type="checkbox" id="task2" style="margin-right: 0.5rem;">
+                                <label for="task2">增加绿色蔬菜摄入</label>
+                            </div>
+                            <div style="margin: 0.5rem 0; padding: 0.5rem; background: white; border-radius: 5px;">
+                                <input type="checkbox" id="task3" style="margin-right: 0.5rem;">
+                                <label for="task3">保持充足睡眠</label>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 1rem 0;">
+                            <div style="background: #ddd; height: 20px; border-radius: 10px; overflow: hidden;">
+                                <div style="background: linear-gradient(45deg, #00b894, #00cec9); height: 100%; width: 0%; transition: width 0.3s ease;" id="planProgress"></div>
+                            </div>
+                            <p style="color: #666; font-size: 0.9rem;">进度: <span id="progressText">0%</span></p>
+                        </div>
+                        
+                        <button onclick="updateProgress()" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer;">
+                            ✅ 完成任务
+                        </button>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">📈 计划概览</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.3rem 0;"><strong>当前阶段:</strong> 第1-7天 - 建立基础习惯</p>
+                            <p style="margin: 0.3rem 0;"><strong>已完成天数:</strong> 0天</p>
+                            <p style="margin: 0.3rem 0;"><strong>总体进度:</strong> 0%</p>
+                            <p style="margin: 0.3rem 0;"><strong>预计完成:</strong> 21天后</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showMessage(planHTML, 'info');
+        }
+        
+        // 显示能量光环
+        function showEnergyAura() {
+            const auraHTML = `
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #333; margin-bottom: 1rem;">🌈 您的能量光环</h2>
+                    
+                    <div style="margin: 2rem 0;">
+                        <div class="energy-aura" style="width: 200px; height: 200px; margin: 1rem auto; position: relative; border-radius: 50%; background: conic-gradient(from 0deg, #4CAF50, #8BC34A, #CDDC39, #4CAF50); animation: rotate 10s linear infinite;">
+                            <div style="position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 2rem;">
+                                85
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #e8f5e8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">光环解读</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.5rem 0;"><strong>光环色彩:</strong> 绿色系 - 代表生命力旺盛</p>
+                            <p style="margin: 0.5rem 0;"><strong>能量强度:</strong> 85% - 非常活跃</p>
+                            <p style="margin: 0.5rem 0;"><strong>流动模式:</strong> 顺时针旋转 - 正向能量</p>
+                            <p style="margin: 0.5rem 0;"><strong>代表特质:</strong> 创造力、生命力、平衡感</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f3e5f5; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">能量建议</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.5rem 0;">• 您的能量光环显示您具有强大的生命力</p>
+                            <p style="margin: 0.5rem 0;">• 建议多进行户外活动，接触自然</p>
+                            <p style="margin: 0.5rem 0;">• 适合进行创造性工作和艺术活动</p>
+                            <p style="margin: 0.5rem 0;">• 保持这种积极的能量状态</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showMessage(auraHTML, 'info');
+        }
+        
+        // 显示色彩分析
+        function showColorAnalysis() {
+            const colorHTML = `
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #333; margin-bottom: 1rem;">🎨 色彩和五行分析</h2>
+                    
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">🌈 适合的色彩</h3>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin: 1rem 0;">
+                            <div style="width: 50px; height: 50px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">绿</div>
+                            <div style="width: 50px; height: 50px; background: #2196F3; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">蓝</div>
+                            <div style="width: 50px; height: 50px; background: #9C27B0; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">紫</div>
+                        </div>
+                        <p style="color: #666;">这些色彩能增强您的能量和创造力</p>
+                    </div>
+                    
+                    <div style="background: #fff3e0; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">⚠️ 避免的色彩</h3>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin: 1rem 0;">
+                            <div style="width: 50px; height: 50px; background: #f44336; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">红</div>
+                        </div>
+                        <p style="color: #666;">过于鲜艳的红色可能会影响您的能量平衡</p>
+                    </div>
+                    
+                    <div style="background: #e8f5e8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">🌿 五行分析</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.5rem 0;"><strong>主导五行:</strong> 木 - 代表生长、创造力</p>
+                            <p style="margin: 0.5rem 0;"><strong>平衡状态:</strong> 良好 - 五行协调</p>
+                            <p style="margin: 0.5rem 0;"><strong>调和建议:</strong> 多接触自然，增加木元素</p>
+                            <p style="margin: 0.5rem 0;"><strong>适合活动:</strong> 园艺、户外运动、艺术创作</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f3e5f5; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <h3 style="color: #333; margin-bottom: 0.5rem;">💄 妆容建议</h3>
+                        <div style="text-align: left; color: #666;">
+                            <p style="margin: 0.5rem 0;">• 眼影: 绿色、蓝色系</p>
+                            <p style="margin: 0.5rem 0;">• 唇彩: 自然粉色、珊瑚色</p>
+                            <p style="margin: 0.5rem 0;">• 腮红: 淡粉色、桃色</p>
+                            <p style="margin: 0.5rem 0;">• 整体风格: 自然清新</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showMessage(colorHTML, 'info');
+        }
+        
+        // 更新计划进度
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const progressBar = document.getElementById('planProgress');
+            const progressText = document.getElementById('progressText');
+            
+            let completed = 0;
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) completed++;
+            });
+            
+            const progress = (completed / checkboxes.length) * 100;
+            progressBar.style.width = progress + '%';
+            progressText.textContent = Math.round(progress) + '%';
+            
+            if (progress === 100) {
+                setTimeout(() => {
+                    showMessage('🎉 恭喜！今日任务已完成！\n\n明天继续第2天的任务。', 'success');
+                }, 1000);
+            }
         }
         
         // 直接进入分析页面 - 增强版
@@ -875,7 +1090,7 @@ cat > dist/app/index.html << 'EOF'
             const modal = document.getElementById('modal');
             const modalContent = document.getElementById('modalContent');
             
-            modalContent.textContent = message;
+            modalContent.innerHTML = message; // Use innerHTML to allow HTML tags
             modal.style.display = 'flex';
         }
         
