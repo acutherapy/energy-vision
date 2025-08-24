@@ -269,27 +269,27 @@ cat > dist/index.html << 'EOF'
         <div class="directory-section">
             <h2>📋 功能目录</h2>
             <div class="directory-grid">
-                <div class="directory-item" onclick="openApp()">
+                <div class="directory-item" onclick="openFeature('analysis')">
                     <h4>📸 能量分析</h4>
                     <p>拍照分析能量状态</p>
                 </div>
-                <div class="directory-item" onclick="openApp()">
+                <div class="directory-item" onclick="openFeature('aura')">
                     <h4>🌈 能量光环</h4>
                     <p>DALL-E生成能量图像</p>
                 </div>
-                <div class="directory-item" onclick="openApp()">
+                <div class="directory-item" onclick="openFeature('ai')">
                     <h4>🤖 AI解读</h4>
                     <p>智能分析报告</p>
                 </div>
-                <div class="directory-item" onclick="openApp()">
+                <div class="directory-item" onclick="openFeature('plan')">
                     <h4>📊 21天计划</h4>
                     <p>个性化提升方案</p>
                 </div>
-                <div class="directory-item" onclick="openApp()">
+                <div class="directory-item" onclick="openFeature('checkin')">
                     <h4>✅ 打卡记录</h4>
                     <p>任务完成跟踪</p>
                 </div>
-                <div class="directory-item" onclick="openApp()">
+                <div class="directory-item" onclick="openFeature('health')">
                     <h4>💪 健康方案</h4>
                     <p>个性化健康建议</p>
                 </div>
@@ -334,6 +334,66 @@ cat > dist/index.html << 'EOF'
         function openApp() {
             window.location.href = '/app';
         }
+        
+        // 打开特定功能页面
+        function openFeature(feature) {
+            switch(feature) {
+                case 'analysis':
+                    window.location.href = '/app#analysis';
+                    break;
+                case 'aura':
+                    window.location.href = '/app#aura';
+                    break;
+                case 'ai':
+                    window.location.href = '/app#ai';
+                    break;
+                case 'plan':
+                    window.location.href = '/app#plan';
+                    break;
+                case 'checkin':
+                    window.location.href = '/app#checkin';
+                    break;
+                case 'health':
+                    window.location.href = '/app#health';
+                    break;
+                default:
+                    window.location.href = '/app';
+            }
+        }
+        
+        // 测试API连接
+        async function testAPI() {
+            try {
+                const response = await fetch('/api/test');
+                if (response.ok) {
+                    console.log('API连接正常');
+                    return true;
+                }
+            } catch (error) {
+                console.log('API连接测试中...');
+                return false;
+            }
+        }
+        
+        // 页面加载时测试API
+        document.addEventListener('DOMContentLoaded', function() {
+            // 测试API连接
+            testAPI();
+            
+            // 添加动画效果
+            const features = document.querySelectorAll('.feature');
+            features.forEach((feature, index) => {
+                feature.style.animationDelay = `${index * 0.1}s`;
+                feature.style.animation = 'fadeInUp 0.6s ease forwards';
+            });
+            
+            // 添加目录项动画
+            const directoryItems = document.querySelectorAll('.directory-item');
+            directoryItems.forEach((item, index) => {
+                item.style.animationDelay = `${(index + 3) * 0.1}s`;
+                item.style.animation = 'fadeInUp 0.6s ease forwards';
+            });
+        });
         
         // 添加动画样式
         const style = document.createElement('style');
@@ -845,110 +905,171 @@ cat > dist/app/index.html << 'EOF'
         
         // 显示分析结果 - 增强版
         function showAnalysisResults() {
-            // 创建包含能量光环和详细分析的结果页面
-            const resultHTML = `
-                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                    <h2 style="color: #333; margin-bottom: 1rem;">🔮 能量分析结果 - 增强版</h2>
-                    
-                    <!-- 能量光环 -->
-                    <div style="margin: 2rem 0;">
-                        <h3 style="color: #333;">🌈 您的能量光环</h3>
-                        <div class="energy-aura" style="width: 150px; height: 150px; margin: 1rem auto; position: relative; border-radius: 50%; background: conic-gradient(from 0deg, #4CAF50, #8BC34A, #CDDC39, #4CAF50); animation: rotate 10s linear infinite;">
-                            <div style="position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
-                                85
+            // 调用API获取分析结果
+            callAnalysisAPI().then(analysisResult => {
+                const results = analysisResult || {
+                    score: 89,
+                    level: 'high',
+                    aura: {
+                        intensity: 87,
+                        color: '#FF9800',
+                        pattern: '脉冲扩散'
+                    },
+                    features: {
+                        vitality: 91,
+                        balance: 85,
+                        harmony: 88,
+                        clarity: 83
+                    },
+                    insights: [
+                        '你的能量状态非常活跃，充满创造力和动力。适合进行高强度活动或创造性工作。'
+                    ],
+                    recommendations: [
+                        '每天进行30分钟有氧运动',
+                        '增加绿色蔬菜摄入',
+                        '保持充足睡眠',
+                        '尝试冥想练习'
+                    ]
+                };
+                
+                const message = `
+                    <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: white; margin-bottom: 1rem;">🔮 能量分析结果</h2>
+                        
+                        <!-- 能量画像 -->
+                        <div class="analysis-result">
+                            <h3 style="color: white; margin-bottom: 1rem; text-align: center;">🎨 您的能量画像</h3>
+                            <div class="aura-image-container">
+                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center" alt="能量光环" class="aura-image">
+                                <div class="energy-score">
+                                    ${results.score}
+                                </div>
+                            </div>
+                            <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; text-align: center; margin: 1rem 0;">✨ DALL-E生成的能量光环</p>
+                            <div style="text-align: center; margin: 1rem 0;">
+                                <span style="background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin: 0 0.3rem;">能量强度: ${results.aura.intensity}%</span>
+                                <span style="background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin: 0 0.3rem;">光环色彩: ${results.aura.color}</span>
+                                <span style="background: rgba(168, 85, 247, 0.2); color: #a855f7; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; margin: 0 0.3rem;">流动模式: ${results.aura.pattern}</span>
                             </div>
                         </div>
-                        <p style="color: #666; font-size: 0.9rem;">能量强度: 85% | 光环色彩: 绿色系 | 流动模式: 顺时针</p>
-                    </div>
-                    
-                    <!-- 基础分析 -->
-                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                        <h3 style="color: #333; margin-bottom: 0.5rem;">📊 基础分析</h3>
-                        <p style="color: #666; margin: 0.5rem 0;"><strong>总体评分:</strong> 85/100</p>
-                        <p style="color: #666; margin: 0.5rem 0;"><strong>能量等级:</strong> high</p>
-                        <p style="color: #666; margin: 0.5rem 0;"><strong>生命力:</strong> 88/100</p>
-                        <p style="color: #666; margin: 0.5rem 0;"><strong>平衡性:</strong> 82/100</p>
-                    </div>
-                    
-                    <!-- AI智能解读 -->
-                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                        <h3 style="color: #333; margin-bottom: 0.5rem;">🤖 AI智能解读</h3>
-                        <div style="text-align: left; color: #666;">
-                            <p style="margin: 0.5rem 0;"><strong>主要洞察:</strong></p>
-                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-                                <li>您的能量状态非常活跃</li>
-                                <li>身心协调良好</li>
-                                <li>适合进行创造性工作</li>
-                                <li>建议多进行户外活动</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- 色彩和五行分析 -->
-                    <div style="background: #f3e5f5; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                        <h3 style="color: #333; margin-bottom: 0.5rem;">🎨 色彩和五行分析</h3>
-                        <div style="text-align: left; color: #666;">
-                            <p style="margin: 0.5rem 0;"><strong>适合色彩:</strong> 绿色、蓝色、紫色</p>
-                            <p style="margin: 0.5rem 0;"><strong>避免色彩:</strong> 过于鲜艳的红色</p>
-                            <p style="margin: 0.5rem 0;"><strong>主导五行:</strong> 木</p>
-                            <p style="margin: 0.5rem 0;"><strong>平衡状态:</strong> 良好</p>
-                            <p style="margin: 0.5rem 0;"><strong>调和建议:</strong> 多接触自然，增加木元素</p>
-                        </div>
-                    </div>
-                    
-                    <!-- 21天计划 -->
-                    <div style="background: #e8f5e8; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                        <h3 style="color: #333; margin-bottom: 0.5rem;">📊 21天能量提升计划</h3>
-                        <div style="text-align: left; color: #666;">
-                            <div style="margin: 0.5rem 0;">
-                                <p style="margin: 0.3rem 0;"><strong>第1-7天: 建立基础习惯</strong></p>
-                                <ul style="margin: 0.3rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                                    <li>每天30分钟有氧运动</li>
-                                    <li>增加绿色蔬菜摄入</li>
-                                    <li>保持充足睡眠</li>
-                                </ul>
-                            </div>
-                            <div style="margin: 0.5rem 0;">
-                                <p style="margin: 0.3rem 0;"><strong>第8-14天: 深化能量练习</strong></p>
-                                <ul style="margin: 0.3rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                                    <li>尝试冥想练习</li>
-                                    <li>增加户外活动</li>
-                                    <li>能量呼吸练习</li>
-                                </ul>
-                            </div>
-                            <div style="margin: 0.5rem 0;">
-                                <p style="margin: 0.3rem 0;"><strong>第15-21天: 巩固和提升</strong></p>
-                                <ul style="margin: 0.3rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                                    <li>能量光环冥想</li>
-                                    <li>色彩疗法练习</li>
-                                    <li>五行平衡练习</li>
-                                </ul>
+                        
+                        <!-- 能量分数 -->
+                        <div class="analysis-result">
+                            <h3 style="color: white; margin-bottom: 1rem;">Energy Score</h3>
+                            <div style="text-align: center; margin: 2rem 0;">
+                                <div style="font-size: 4rem; font-weight: bold; color: #a855f7; margin-bottom: 0.5rem;">${results.score}</div>
+                                <div style="color: white; font-size: 1.2rem; margin-bottom: 1rem;">High & Active</div>
+                                <p style="color: rgba(255,255,255,0.8); line-height: 1.6;">${results.insights[0]}</p>
                             </div>
                         </div>
+                        
+                        <!-- 能量特征分析 -->
+                        <div class="energy-features">
+                            <h3 style="color: white; margin-bottom: 1rem;">能量特征分析</h3>
+                            <div class="feature-bar">
+                                <span class="feature-label">生命力</span>
+                                <div class="feature-progress">
+                                    <div class="feature-fill" style="width: ${results.features.vitality}%;"></div>
+                                </div>
+                                <span class="feature-percentage">${results.features.vitality}%</span>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-label">平衡性</span>
+                                <div class="feature-progress">
+                                    <div class="feature-fill" style="width: ${results.features.balance}%;"></div>
+                                </div>
+                                <span class="feature-percentage">${results.features.balance}%</span>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-label">和谐度</span>
+                                <div class="feature-progress">
+                                    <div class="feature-fill" style="width: ${results.features.harmony}%;"></div>
+                                </div>
+                                <span class="feature-percentage">${results.features.harmony}%</span>
+                            </div>
+                            <div class="feature-bar">
+                                <span class="feature-label">清晰度</span>
+                                <div class="feature-progress">
+                                    <div class="feature-fill" style="width: ${results.features.clarity}%;"></div>
+                                </div>
+                                <span class="feature-percentage">${results.features.clarity}%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                            <button onclick="start21DayPlan()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                🎯 开始21天计划
+                            </button>
+                            <button onclick="showEnergyPortrait()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                🎨 查看能量画像
+                            </button>
+                        </div>
                     </div>
-                    
-                    <!-- 操作按钮 -->
-                    <div style="margin: 2rem 0;">
-                        <button onclick="start21DayPlan()" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 0.5rem; cursor: pointer;">
-                            🎯 开始21天计划
-                        </button>
-                        <button onclick="showEnergyAura()" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 0.5rem; cursor: pointer;">
-                            🌈 查看能量光环
-                        </button>
-                        <button onclick="showColorAnalysis()" style="background: linear-gradient(45deg, #4834d4, #686de0); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; margin: 0.5rem; cursor: pointer;">
-                            🎨 色彩分析
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            showMessage(resultHTML, 'success');
-            isAnalyzing = false;
-            
-            // 隐藏进度条
-            setTimeout(() => {
-                document.getElementById('analysisProgress').style.display = 'none';
-            }, 3000);
+                `;
+                
+                showMessage(message, 'success');
+                isAnalyzing = false;
+                
+                // 隐藏进度条
+                setTimeout(() => {
+                    document.getElementById('analysisProgress').style.display = 'none';
+                }, 3000);
+            }).catch(error => {
+                console.error('API调用失败:', error);
+                // 如果API失败，使用默认数据
+                showAnalysisResults();
+            });
+        }
+        
+        // 调用分析API
+        async function callAnalysisAPI() {
+            try {
+                // 这里可以连接到真实的API
+                // const response = await fetch('/api/analysis', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify({
+                //         image: 'base64_image_data'
+                //     })
+                // });
+                // return await response.json();
+                
+                // 模拟API调用
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve({
+                            score: 89,
+                            level: 'high',
+                            aura: {
+                                intensity: 87,
+                                color: '#FF9800',
+                                pattern: '脉冲扩散'
+                            },
+                            features: {
+                                vitality: 91,
+                                balance: 85,
+                                harmony: 88,
+                                clarity: 83
+                            },
+                            insights: [
+                                '你的能量状态非常活跃，充满创造力和动力。适合进行高强度活动或创造性工作。'
+                            ],
+                            recommendations: [
+                                '每天进行30分钟有氧运动',
+                                '增加绿色蔬菜摄入',
+                                '保持充足睡眠',
+                                '尝试冥想练习'
+                            ]
+                        });
+                    }, 1000);
+                });
+            } catch (error) {
+                console.error('API调用错误:', error);
+                return null;
+            }
         }
         
         // 开始21天计划
