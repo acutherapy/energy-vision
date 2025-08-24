@@ -265,37 +265,6 @@ cat > dist/index.html << 'EOF'
             </div>
         </div>
         
-        <!-- 功能目录 -->
-        <div class="directory-section">
-            <h2>📋 功能目录</h2>
-            <div class="directory-grid">
-                <div class="directory-item" onclick="openFeature('analysis')">
-                    <h4>📸 能量分析</h4>
-                    <p>拍照分析能量状态</p>
-                </div>
-                <div class="directory-item" onclick="openFeature('aura')">
-                    <h4>🌈 能量光环</h4>
-                    <p>DALL-E生成能量图像</p>
-                </div>
-                <div class="directory-item" onclick="openFeature('ai')">
-                    <h4>🤖 AI解读</h4>
-                    <p>智能分析报告</p>
-                </div>
-                <div class="directory-item" onclick="openFeature('plan')">
-                    <h4>📊 21天计划</h4>
-                    <p>个性化提升方案</p>
-                </div>
-                <div class="directory-item" onclick="openFeature('checkin')">
-                    <h4>✅ 打卡记录</h4>
-                    <p>任务完成跟踪</p>
-                </div>
-                <div class="directory-item" onclick="openFeature('health')">
-                    <h4>💪 健康方案</h4>
-                    <p>个性化健康建议</p>
-                </div>
-            </div>
-        </div>
-        
         <div class="cta">
             <a href="#" class="cta-button primary" onclick="openApp()">
                 🚀 开始使用应用
@@ -929,7 +898,8 @@ cat > dist/app/index.html << 'EOF'
                         '增加绿色蔬菜摄入',
                         '保持充足睡眠',
                         '尝试冥想练习'
-                    ]
+                    ],
+                    auraImageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center' // 默认图像
                 };
                 
                 const message = `
@@ -940,7 +910,7 @@ cat > dist/app/index.html << 'EOF'
                         <div class="analysis-result">
                             <h3 style="color: white; margin-bottom: 1rem; text-align: center;">🎨 您的能量画像</h3>
                             <div class="aura-image-container">
-                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center" alt="能量光环" class="aura-image">
+                                <img src="${results.auraImageUrl}" alt="能量光环" class="aura-image">
                                 <div class="energy-score">
                                     ${results.score}
                                 </div>
@@ -1025,6 +995,9 @@ cat > dist/app/index.html << 'EOF'
         // 调用分析API
         async function callAnalysisAPI() {
             try {
+                // 生成ChatGPT能量光环图像
+                const auraImageUrl = await generateChatGPTAuraImage();
+                
                 // 这里可以连接到真实的API
                 // const response = await fetch('/api/analysis', {
                 //     method: 'POST',
@@ -1062,13 +1035,49 @@ cat > dist/app/index.html << 'EOF'
                                 '增加绿色蔬菜摄入',
                                 '保持充足睡眠',
                                 '尝试冥想练习'
-                            ]
+                            ],
+                            auraImageUrl: auraImageUrl
                         });
                     }, 1000);
                 });
             } catch (error) {
                 console.error('API调用错误:', error);
                 return null;
+            }
+        }
+        
+        // 生成ChatGPT能量光环图像
+        async function generateChatGPTAuraImage() {
+            try {
+                // 这里应该调用真实的ChatGPT DALL-E API
+                // const response = await fetch('/api/generate-aura', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify({
+                //         prompt: 'Create a mystical energy aura image with glowing purple and blue colors, featuring a human silhouette with radiant energy rings and cosmic background, digital art style'
+                //     })
+                // });
+                // const data = await response.json();
+                // return data.imageUrl;
+                
+                // 模拟ChatGPT图像生成 - 使用高质量的AI生成图像
+                const auraImages = [
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center',
+                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
+                    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center'
+                ];
+                
+                // 随机选择一个图像，模拟ChatGPT生成
+                const randomIndex = Math.floor(Math.random() * auraImages.length);
+                return auraImages[randomIndex];
+                
+            } catch (error) {
+                console.error('ChatGPT图像生成错误:', error);
+                // 返回默认图像
+                return 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center';
             }
         }
         
@@ -1314,6 +1323,64 @@ cat > dist/app/index.html << 'EOF'
                 closeModal();
             }
         });
+        
+        // 显示能量画像详情
+        function showEnergyPortrait() {
+            // 生成新的ChatGPT图像
+            generateChatGPTAuraImage().then(auraImageUrl => {
+                const message = `
+                    <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: white; margin-bottom: 1rem;">🎨 能量画像详情</h2>
+                        
+                        <div class="aura-image-container" style="margin: 2rem auto;">
+                            <img src="${auraImageUrl}" alt="能量光环" class="aura-image">
+                            <div class="energy-score">89</div>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
+                            <h3 style="color: white; margin-bottom: 1rem;">🔍 AI解读</h3>
+                            <p style="color: rgba(255,255,255,0.8); line-height: 1.6; text-align: left;">
+                                根据您的面部能量分析，您的光环呈现出温暖的橙色调（#FF9800），表明您具有高度的活力和创造力。
+                                光环的脉冲扩散模式显示您的能量非常活跃且富有变化性，适合进行创新性工作和艺术创作。
+                                这种能量状态与日出时分的自然能量相呼应，象征着新的开始和无限的可能性。
+                            </p>
+                        </div>
+                        
+                        <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            返回
+                        </button>
+                    </div>
+                `;
+                showMessage(message, 'info');
+            }).catch(error => {
+                console.error('生成能量画像失败:', error);
+                // 使用默认图像
+                const message = `
+                    <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: white; margin-bottom: 1rem;">🎨 能量画像详情</h2>
+                        
+                        <div class="aura-image-container" style="margin: 2rem auto;">
+                            <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center" alt="能量光环" class="aura-image">
+                            <div class="energy-score">89</div>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
+                            <h3 style="color: white; margin-bottom: 1rem;">🔍 AI解读</h3>
+                            <p style="color: rgba(255,255,255,0.8); line-height: 1.6; text-align: left;">
+                                根据您的面部能量分析，您的光环呈现出温暖的橙色调（#FF9800），表明您具有高度的活力和创造力。
+                                光环的脉冲扩散模式显示您的能量非常活跃且富有变化性，适合进行创新性工作和艺术创作。
+                                这种能量状态与日出时分的自然能量相呼应，象征着新的开始和无限的可能性。
+                            </p>
+                        </div>
+                        
+                        <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            返回
+                        </button>
+                    </div>
+                `;
+                showMessage(message, 'info');
+            });
+        }
         
         // 页面加载完成后的初始化
         document.addEventListener('DOMContentLoaded', function() {
