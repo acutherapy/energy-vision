@@ -99,69 +99,126 @@ cat > dist/index.html << 'EOF'
         
         .cta {
             margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
         .cta-button {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
             padding: 1rem 2rem;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 25px;
             text-decoration: none;
-            display: inline-block;
-            margin: 0 0.5rem;
-        }
-        
-        .cta-button:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
         
         .cta-button.primary {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border-color: #ff6b6b;
+            background: linear-gradient(45deg, #a855f7, #9333ea);
+            color: white;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        }
+        
+        .cta-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
         }
         
         .cta-button.secondary {
-            background: linear-gradient(45deg, #4834d4, #686de0);
-            border-color: #4834d4;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-color: rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .cta-button.secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
         }
         
         .cta-button.success {
-            background: linear-gradient(45deg, #00b894, #00cec9);
-            border-color: #00b894;
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .cta-button.success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
         }
         
         .status {
             margin-top: 2rem;
             padding: 1rem;
             background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            font-size: 0.9rem;
-            opacity: 0.8;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
         
         .links {
-            margin-top: 1rem;
+            margin-top: 2rem;
             display: flex;
-            justify-content: center;
             gap: 1rem;
+            justify-content: center;
             flex-wrap: wrap;
         }
         
         .links a {
-            color: #fff;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
         }
         
         .links a:hover {
-            opacity: 1;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        /* 功能目录样式 */
+        .directory-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .directory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .directory-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .directory-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .directory-item h4 {
+            margin-bottom: 0.5rem;
+            color: #a855f7;
+        }
+        
+        .directory-item p {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
         
         @media (max-width: 768px) {
@@ -205,6 +262,37 @@ cat > dist/index.html << 'EOF'
             <div class="feature" onclick="openApp()">
                 <h3>📊 21天计划</h3>
                 <p>个性化能量提升方案，每日任务跟踪和进度管理</p>
+            </div>
+        </div>
+        
+        <!-- 功能目录 -->
+        <div class="directory-section">
+            <h2>📋 功能目录</h2>
+            <div class="directory-grid">
+                <div class="directory-item" onclick="openApp()">
+                    <h4>📸 能量分析</h4>
+                    <p>拍照分析能量状态</p>
+                </div>
+                <div class="directory-item" onclick="openApp()">
+                    <h4>🌈 能量光环</h4>
+                    <p>DALL-E生成能量图像</p>
+                </div>
+                <div class="directory-item" onclick="openApp()">
+                    <h4>🤖 AI解读</h4>
+                    <p>智能分析报告</p>
+                </div>
+                <div class="directory-item" onclick="openApp()">
+                    <h4>📊 21天计划</h4>
+                    <p>个性化提升方案</p>
+                </div>
+                <div class="directory-item" onclick="openApp()">
+                    <h4>✅ 打卡记录</h4>
+                    <p>任务完成跟踪</p>
+                </div>
+                <div class="directory-item" onclick="openApp()">
+                    <h4>💪 健康方案</h4>
+                    <p>个性化健康建议</p>
+                </div>
             </div>
         </div>
         
