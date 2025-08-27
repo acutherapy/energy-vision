@@ -1030,12 +1030,15 @@ cat > dist/app/index.html << 'EOF'
                         </div>
                         
                         <!-- 操作按钮 -->
-                        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                             <button onclick="start21DayPlan()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
                                 🎯 开始21天计划
                             </button>
                             <button onclick="showEnergyPortrait()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
                                 🎨 查看能量画像
+                            </button>
+                            <button onclick="window.location.href='/'" style="background: #f39c12; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                🏠 返回主页
                             </button>
                         </div>
                     </div>
@@ -1133,14 +1136,14 @@ cat > dist/app/index.html << 'EOF'
                 // const data = await response.json();
                 // return data.data[0].url;
                 
-                // 模拟ChatGPT图像生成 - 使用高质量的AI生成图像
+                // 模拟ChatGPT图像生成 - 使用真正的能量光环图像
                 const auraImages = [
-                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center',
-                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
-                    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center',
-                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center',
-                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
-                    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center'
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center&blur=0',
+                    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center&blur=0',
+                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center&blur=0',
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center&blur=0',
+                    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center&blur=0',
+                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center&blur=0'
                 ];
                 
                 // 随机选择一个图像，模拟ChatGPT生成
@@ -1153,7 +1156,7 @@ cat > dist/app/index.html << 'EOF'
             } catch (error) {
                 console.error('ChatGPT API调用错误:', error);
                 // 返回默认图像
-                return 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center';
+                return 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center&blur=0';
             }
         }
         
@@ -1189,6 +1192,12 @@ cat > dist/app/index.html << 'EOF'
                         
                         <button onclick="updateProgress()" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer;">
                             ✅ 完成任务
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button onclick="window.location.href='/'" style="background: #f39c12; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            🏠 返回主页
                         </button>
                     </div>
                     
@@ -1422,9 +1431,14 @@ cat > dist/app/index.html << 'EOF'
                             </p>
                         </div>
                         
-                        <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
-                            返回
-                        </button>
+                        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                            <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                返回
+                            </button>
+                            <button onclick="window.location.href='/'" style="background: #f39c12; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                🏠 返回主页
+                            </button>
+                        </div>
                     </div>
                 `;
                 showMessage(message, 'info');
@@ -1449,9 +1463,14 @@ cat > dist/app/index.html << 'EOF'
                             </p>
                         </div>
                         
-                        <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
-                            返回
-                        </button>
+                        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                            <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                返回
+                            </button>
+                            <button onclick="window.location.href='/'" style="background: #f39c12; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                                🏠 返回主页
+                            </button>
+                        </div>
                     </div>
                 `;
                 showMessage(message, 'info');
@@ -1506,9 +1525,14 @@ cat > dist/app/index.html << 'EOF'
                         </div>
                     </div>
                     
-                    <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
-                        返回
-                    </button>
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                        <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            返回
+                        </button>
+                        <button onclick="window.location.href='/'" style="background: #f39c12; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            🏠 返回主页
+                        </button>
+                    </div>
                 </div>
             `;
             showMessage(message, 'info');
@@ -1545,9 +1569,14 @@ cat > dist/app/index.html << 'EOF'
                         </button>
                     </div>
                     
-                    <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
-                        返回
-                    </button>
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                        <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            返回
+                        </button>
+                        <button onclick="window.location.href='/'" style="background: #f39c12; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                            🏠 返回主页
+                        </button>
+                    </div>
                 </div>
             `;
             showMessage(message, 'info');
