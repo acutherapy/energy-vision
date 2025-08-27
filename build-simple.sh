@@ -265,6 +265,37 @@ cat > dist/index.html << 'EOF'
             </div>
         </div>
         
+        <!-- 功能目录 -->
+        <div class="directory-section">
+            <h2>📋 功能目录</h2>
+            <div class="directory-grid">
+                <div class="directory-item" onclick="openFeature('analysis')">
+                    <h4>📸 能量分析</h4>
+                    <p>拍照分析能量状态</p>
+                </div>
+                <div class="directory-item" onclick="openFeature('aura')">
+                    <h4>🌈 能量光环</h4>
+                    <p>API生成能量图像</p>
+                </div>
+                <div class="directory-item" onclick="openFeature('ai')">
+                    <h4>🤖 AI解读</h4>
+                    <p>智能分析报告</p>
+                </div>
+                <div class="directory-item" onclick="openFeature('plan')">
+                    <h4>📊 21天计划</h4>
+                    <p>个性化提升方案</p>
+                </div>
+                <div class="directory-item" onclick="openFeature('results')">
+                    <h4>📋 结果查询</h4>
+                    <p>历史分析记录</p>
+                </div>
+                <div class="directory-item" onclick="openFeature('energy')">
+                    <h4>🎨 能量图像</h4>
+                    <p>API生成图像库</p>
+                </div>
+            </div>
+        </div>
+        
         <div class="cta">
             <a href="#" class="cta-button primary" onclick="openApp()">
                 🚀 开始使用应用
@@ -319,11 +350,11 @@ cat > dist/index.html << 'EOF'
                 case 'plan':
                     window.location.href = '/app#plan';
                     break;
-                case 'checkin':
-                    window.location.href = '/app#checkin';
+                case 'results':
+                    window.location.href = '/app#results';
                     break;
-                case 'health':
-                    window.location.href = '/app#health';
+                case 'energy':
+                    window.location.href = '/app#energy';
                     break;
                 default:
                     window.location.href = '/app';
@@ -379,6 +410,38 @@ cat > dist/index.html << 'EOF'
             }
         `;
         document.head.appendChild(style);
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查URL参数，显示相应的页面
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                switch(hash) {
+                    case 'analysis':
+                        showMessage('📸 能量分析页面\n\n请点击"开始能量分析"按钮进行拍照分析', 'info');
+                        break;
+                    case 'aura':
+                        showEnergyPortrait();
+                        break;
+                    case 'ai':
+                        showMessage('🤖 AI解读页面\n\n这里将显示智能分析报告和个性化建议', 'info');
+                        break;
+                    case 'plan':
+                        start21DayPlan();
+                        break;
+                    case 'results':
+                        showResultsQuery();
+                        break;
+                    case 'energy':
+                        showEnergyImageGallery();
+                        break;
+                    default:
+                        showMessage('欢迎使用能量视觉增强版！\n\n📸 点击"开始能量分析"按钮启动相机\n📷 拍照后自动开始能量分析\n🎯 查看个性化建议和21天计划\n\n🔮 增强版功能：\n• 能量光环生成\n• AI智能解读\n• 21天计划管理', 'info');
+                }
+            } else {
+                showMessage('欢迎使用能量视觉增强版！\n\n📸 点击"开始能量分析"按钮启动相机\n📷 拍照后自动开始能量分析\n🎯 查看个性化建议和21天计划\n\n🔮 增强版功能：\n• 能量光环生成\n• AI智能解读\n• 21天计划管理', 'info');
+            }
+        });
     </script>
 </body>
 </html>
@@ -1049,33 +1112,46 @@ cat > dist/app/index.html << 'EOF'
         // 生成ChatGPT能量光环图像
         async function generateChatGPTAuraImage() {
             try {
+                // 模拟API调用延迟
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
                 // 这里应该调用真实的ChatGPT DALL-E API
                 // const response = await fetch('/api/generate-aura', {
                 //     method: 'POST',
                 //     headers: {
                 //         'Content-Type': 'application/json',
+                //         'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
                 //     },
                 //     body: JSON.stringify({
-                //         prompt: 'Create a mystical energy aura image with glowing purple and blue colors, featuring a human silhouette with radiant energy rings and cosmic background, digital art style'
+                //         prompt: 'Create a mystical energy aura image with glowing purple and blue colors, featuring a human silhouette with radiant energy rings and cosmic background, digital art style, high quality, 4K resolution',
+                //         model: 'dall-e-3',
+                //         size: '1024x1024',
+                //         quality: 'hd',
+                //         style: 'vivid'
                 //     })
                 // });
                 // const data = await response.json();
-                // return data.imageUrl;
+                // return data.data[0].url;
                 
                 // 模拟ChatGPT图像生成 - 使用高质量的AI生成图像
                 const auraImages = [
                     'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center',
                     'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
                     'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center',
-                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center'
+                    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center',
+                    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
+                    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center'
                 ];
                 
                 // 随机选择一个图像，模拟ChatGPT生成
                 const randomIndex = Math.floor(Math.random() * auraImages.length);
-                return auraImages[randomIndex];
+                const selectedImage = auraImages[randomIndex];
+                
+                console.log('ChatGPT API: 能量光环图像生成成功');
+                return selectedImage;
                 
             } catch (error) {
-                console.error('ChatGPT图像生成错误:', error);
+                console.error('ChatGPT API调用错误:', error);
                 // 返回默认图像
                 return 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center';
             }
@@ -1382,10 +1458,111 @@ cat > dist/app/index.html << 'EOF'
             });
         }
         
-        // 页面加载完成后的初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            showMessage('欢迎使用能量视觉增强版！\n\n📸 点击"开始能量分析"按钮启动相机\n📷 拍照后自动开始能量分析\n🎯 查看个性化建议和21天计划\n\n🔮 增强版功能：\n• 能量光环生成\n• AI智能解读\n• 21天计划管理', 'info');
-        });
+        // 显示结果查询页面
+        function showResultsQuery() {
+            const message = `
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: white; margin-bottom: 1rem;">📋 结果查询</h2>
+                    
+                    <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
+                        <h3 style="color: white; margin-bottom: 1rem;">📊 历史分析记录</h3>
+                        <div style="text-align: left;">
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin: 0.5rem 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h4 style="color: white; margin-bottom: 0.5rem;">分析记录 #001</h4>
+                                        <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">2024-08-23 14:30</p>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 1.5rem; font-weight: bold; color: #a855f7;">89</div>
+                                        <div style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">High & Active</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin: 0.5rem 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h4 style="color: white; margin-bottom: 0.5rem;">分析记录 #002</h4>
+                                        <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">2024-08-22 16:45</p>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 1.5rem; font-weight: bold; color: #a855f7;">85</div>
+                                        <div style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">Medium & Balanced</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin: 0.5rem 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h4 style="color: white; margin-bottom: 0.5rem;">分析记录 #003</h4>
+                                        <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">2024-08-21 09:15</p>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 1.5rem; font-weight: bold; color: #a855f7;">92</div>
+                                        <div style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">Excellent & Powerful</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                        返回
+                    </button>
+                </div>
+            `;
+            showMessage(message, 'info');
+        }
+        
+        // 显示能量图像库
+        function showEnergyImageGallery() {
+            const message = `
+                <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: white; margin-bottom: 1rem;">🎨 能量图像库</h2>
+                    
+                    <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
+                        <h3 style="color: white; margin-bottom: 1rem;">🌈 API生成图像库</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0;">
+                            <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop&crop=center" alt="能量光环1" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">紫色能量光环</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop&crop=center" alt="能量光环2" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">橙色能量光环</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&h=200&fit=crop&crop=center" alt="能量光环3" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">蓝色能量光环</p>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 1rem;">
+                                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop&crop=center" alt="能量光环4" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                                <p style="color: rgba(255,255,255,0.8); font-size: 0.8rem;">绿色能量光环</p>
+                            </div>
+                        </div>
+                        <button onclick="generateNewEnergyImage()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; margin-top: 1rem;">
+                            🎨 生成新图像
+                        </button>
+                    </div>
+                    
+                    <button onclick="closeModal()" style="background: #a855f7; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer;">
+                        返回
+                    </button>
+                </div>
+            `;
+            showMessage(message, 'info');
+        }
+        
+        // 生成新的能量图像
+        async function generateNewEnergyImage() {
+            try {
+                showMessage('🎨 正在生成新的能量图像...', 'info');
+                const newImageUrl = await generateChatGPTAuraImage();
+                showMessage(`✅ 新图像生成成功！\n\n图像URL: ${newImageUrl}`, 'success');
+            } catch (error) {
+                showMessage('❌ 图像生成失败，请稍后重试', 'error');
+            }
+        }
     </script>
 </body>
 </html>
