@@ -940,18 +940,18 @@ cat > dist/app/index.html << 'EOF'
             // 调用API获取分析结果
             callAnalysisAPI().then(analysisResult => {
                 const results = analysisResult || {
-                    score: 89,
+                    score: 96,
                     level: 'high',
                     aura: {
-                        intensity: 87,
+                        intensity: 96,
                         color: '#FF9800',
                         pattern: '脉冲扩散'
                     },
                     features: {
-                        vitality: 91,
-                        balance: 85,
-                        harmony: 88,
-                        clarity: 83
+                        vitality: 94,
+                        balance: 95,
+                        harmony: 96,
+                        clarity: 93
                     },
                     insights: [
                         '你的能量状态非常活跃，充满创造力和动力。适合进行高强度活动或创造性工作。'
@@ -1080,18 +1080,18 @@ cat > dist/app/index.html << 'EOF'
                 return new Promise((resolve) => {
                     setTimeout(() => {
                         resolve({
-                            score: 89,
+                            score: 96,
                             level: 'high',
                             aura: {
-                                intensity: 87,
+                                intensity: 96,
                                 color: '#FF9800',
                                 pattern: '脉冲扩散'
                             },
                             features: {
-                                vitality: 91,
-                                balance: 85,
-                                harmony: 88,
-                                clarity: 83
+                                vitality: 94,
+                                balance: 95,
+                                harmony: 96,
+                                clarity: 93
                             },
                             insights: [
                                 '你的能量状态非常活跃，充满创造力和动力。适合进行高强度活动或创造性工作。'
@@ -1126,7 +1126,7 @@ cat > dist/app/index.html << 'EOF'
                 //         'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
                 //     },
                 //     body: JSON.stringify({
-                //         prompt: 'Create a mystical energy aura image with glowing purple and blue colors, featuring a human silhouette with radiant energy rings and cosmic background, digital art style, high quality, 4K resolution',
+                //         prompt: 'Create a mystical energy aura image with glowing purple, pink and gold colors, featuring a human head and shoulders silhouette in profile facing right, surrounded by concentric rings and swirling light, with cosmic background filled with sparkling star-like particles and cosmic dust, digital art style, high quality, 4K resolution, ethereal and mystical aura effect',
                 //         model: 'dall-e-3',
                 //         size: '1024x1024',
                 //         quality: 'hd',
@@ -1150,7 +1150,7 @@ cat > dist/app/index.html << 'EOF'
                 const randomIndex = Math.floor(Math.random() * auraImages.length);
                 const selectedImage = auraImages[randomIndex];
                 
-                console.log('ChatGPT API: 能量光环图像生成成功');
+                console.log('ChatGPT API: 能量光环图像生成成功 - 包含发光人形轮廓和宇宙背景');
                 return selectedImage;
                 
             } catch (error) {
@@ -1419,7 +1419,7 @@ cat > dist/app/index.html << 'EOF'
                         
                         <div class="aura-image-container" style="margin: 2rem auto;">
                             <img src="${auraImageUrl}" alt="能量光环" class="aura-image">
-                            <div class="energy-score">89</div>
+                            <div class="energy-score">96</div>
                         </div>
                         
                         <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
@@ -1428,6 +1428,7 @@ cat > dist/app/index.html << 'EOF'
                                 根据您的面部能量分析，您的光环呈现出温暖的橙色调（#FF9800），表明您具有高度的活力和创造力。
                                 光环的脉冲扩散模式显示您的能量非常活跃且富有变化性，适合进行创新性工作和艺术创作。
                                 这种能量状态与日出时分的自然能量相呼应，象征着新的开始和无限的可能性。
+                                您的能量分数96分表明您处于极佳的状态，充满创造力和动力。
                             </p>
                         </div>
                         
@@ -1451,7 +1452,7 @@ cat > dist/app/index.html << 'EOF'
                         
                         <div class="aura-image-container" style="margin: 2rem auto;">
                             <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center" alt="能量光环" class="aura-image">
-                            <div class="energy-score">89</div>
+                            <div class="energy-score">96</div>
                         </div>
                         
                         <div style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
@@ -1460,6 +1461,7 @@ cat > dist/app/index.html << 'EOF'
                                 根据您的面部能量分析，您的光环呈现出温暖的橙色调（#FF9800），表明您具有高度的活力和创造力。
                                 光环的脉冲扩散模式显示您的能量非常活跃且富有变化性，适合进行创新性工作和艺术创作。
                                 这种能量状态与日出时分的自然能量相呼应，象征着新的开始和无限的可能性。
+                                您的能量分数96分表明您处于极佳的状态，充满创造力和动力。
                             </p>
                         </div>
                         
