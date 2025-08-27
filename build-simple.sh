@@ -1137,6 +1137,7 @@ cat > dist/app/index.html << 'EOF'
                 // return data.data[0].url;
                 
                 // 模拟ChatGPT图像生成 - 使用真正的能量光环图像
+                // 这些是更符合能量光环风格的图像URL
                 const auraImages = [
                     'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop&crop=center&blur=0',
                     'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=center&blur=0',
@@ -1594,6 +1595,38 @@ cat > dist/app/index.html << 'EOF'
                 showMessage('❌ 图像生成失败，请稍后重试', 'error');
             }
         }
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查URL参数，显示相应的页面
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                switch(hash) {
+                    case 'analysis':
+                        showMessage('📸 能量分析页面\n\n请点击"开始能量分析"按钮进行拍照分析', 'info');
+                        break;
+                    case 'aura':
+                        showEnergyPortrait();
+                        break;
+                    case 'ai':
+                        showMessage('🤖 AI解读页面\n\n这里将显示智能分析报告和个性化建议', 'info');
+                        break;
+                    case 'plan':
+                        start21DayPlan();
+                        break;
+                    case 'results':
+                        showResultsQuery();
+                        break;
+                    case 'energy':
+                        showEnergyImageGallery();
+                        break;
+                    default:
+                        showMessage('欢迎使用能量视觉增强版！\n\n📸 点击"开始能量分析"按钮启动相机\n📷 拍照后自动开始能量分析\n🎯 查看个性化建议和21天计划\n\n🔮 增强版功能：\n• 能量光环生成\n• AI智能解读\n• 21天计划管理', 'info');
+                }
+            } else {
+                showMessage('欢迎使用能量视觉增强版！\n\n📸 点击"开始能量分析"按钮启动相机\n📷 拍照后自动开始能量分析\n🎯 查看个性化建议和21天计划\n\n🔮 增强版功能：\n• 能量光环生成\n• AI智能解读\n• 21天计划管理', 'info');
+            }
+        });
     </script>
 </body>
 </html>
